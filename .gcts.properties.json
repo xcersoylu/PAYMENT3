@@ -1,0 +1,12 @@
+{
+  "name": "xcersoylu-payment3",
+  "version": "1.0.0",
+  "description": "xcersoylu-PAYMENT3",
+  "repositoryLayout": {
+    "format": "json",
+    "formatVersion": "6",
+    "keepClient": "false",
+    "metaInformation": ".gctsmetadata/",
+    "tableContent": "true"
+  }
+}
