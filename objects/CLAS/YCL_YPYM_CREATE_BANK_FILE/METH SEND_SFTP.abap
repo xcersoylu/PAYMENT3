@@ -19,7 +19,7 @@
 
           lo_web_http_request->set_header_fields( VALUE #( (  name = 'HouseBank'    value = ls_sftp_info-bankshortid )
                                                            (  name = 'AccountID'    value = ls_sftp_info-accountshortid )
-                                                           (  name = 'FileName'     value = iv_filename )
+                                                           (  name = 'FileName'     value = |{ iv_filename }{ ls_sftp_info-file_ext }| )
                                                            (  name = 'SftpHostPort' value = ls_sftp_info-host_name )
                                                            (  name = 'SftpUserPsw'  value = |{ ls_sftp_info-username }/{ ls_sftp_info-password }| )
                                                            (  name = 'SftpPath'     value = ls_sftp_info-sftp_path )

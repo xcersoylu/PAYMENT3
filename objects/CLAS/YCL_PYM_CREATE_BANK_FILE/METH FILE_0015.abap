@@ -66,7 +66,6 @@
     REPLACE SECTION OFFSET 18 LENGTH 26 OF ls_line WITH ls_header-kurum_hesap_no."*-&Kurum Bankomat Hesap Numarasi
     REPLACE SECTION OFFSET 44 LENGTH 5  OF ls_line WITH ls_header-sube_kodu."*-&Sorumlu Sube Kodu
     APPEND INITIAL LINE TO rt_bank_file ASSIGNING FIELD-SYMBOL(<ls_bank_file>).
-    ls_line = ls_line && cl_abap_char_utilities=>cr_lf.
     <ls_bank_file> = ls_line.
 **********************************************************************
 *kalem
@@ -145,7 +144,6 @@
       ENDIF.
 
       APPEND INITIAL LINE TO rt_bank_file ASSIGNING <ls_bank_file>.
-      ls_line = ls_line && cl_abap_char_utilities=>cr_lf.
       <ls_bank_file> = ls_line.
     ENDLOOP.
 
@@ -162,7 +160,6 @@
     REPLACE SECTION OFFSET 5  LENGTH 6  OF ls_line WITH ls_footer-adet_toplam."*-&Toplam İslem Adedi
     REPLACE SECTION OFFSET 11 LENGTH 21 OF ls_line WITH ls_footer-tutar_toplam."*-&Toplam İslem Tutari
     APPEND INITIAL LINE TO rt_bank_file ASSIGNING <ls_bank_file>.
-    ls_line = ls_line && cl_abap_char_utilities=>cr_lf.
     <ls_bank_file> = ls_line.
 
   ENDMETHOD.
