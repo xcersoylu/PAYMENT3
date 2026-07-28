@@ -1,0 +1,1 @@
+CLASS zbp_i_pym_ddl_pay_cus_update DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF yi_pym_ddl_pay_cus_update.
