@@ -133,6 +133,10 @@
     CLEAR ls_line.
     REPLACE SECTION OFFSET 0 LENGTH 1 OF ls_line WITH ls_footer-kayit_tipi."*-&Kayıt Tipi
     REPLACE SECTION OFFSET 1 LENGTH 5 OF ls_line WITH ls_footer-tpl_kayit."*-&Toplam Kayıt Sayısı
+*garanti bankası cr_lf konulmasını istedi.
+    CONDENSE ls_line NO-GAPS.
+    CONCATENATE ls_line lc_cr_lf INTO ls_line.
+***
     APPEND INITIAL LINE TO rt_bank_file ASSIGNING <ls_bank_file>.
     <ls_bank_file> = ls_line.
 
