@@ -60,14 +60,14 @@
 
               APPEND VALUE #( glaccountlineitem             = |001|
                               glaccount                     = <ls_item>-glaccount
-                              documentitemtext              = ''
+                              documentitemtext              = <ls_item>-suppliername
                               _currencyamount = VALUE #( ( currencyrole = '00'
                                                           journalentryitemamount = -1 * abs( <ls_item>-paymentamount )
                                                           currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
 
               APPEND VALUE #( glaccountlineitem             = |002|
                               supplier                      = <ls_item>-supplier
-                              documentitemtext              = '' "<ls_item>-documentitemtext
+                              documentitemtext              = 'Havale'
                               _currencyamount = VALUE #( ( currencyrole = '00'
                                                          journalentryitemamount = abs( <ls_item>-paymentamount )
                                                          currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.

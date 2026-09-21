@@ -71,6 +71,7 @@
           payment~companycode,
           payment~paymentamount,
           payment~currency,
+          payment~currency as transactioncurrency,
           bpbank~bankcountrykey AS supplierbankcountrykey,
           bpbank~banknumber AS supplierbanknumber,
           bpbank~bankaccount AS supplierbankaccount,

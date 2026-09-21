@@ -70,7 +70,7 @@
                             hesap_no = ls_bank_file-companybankaccount
                             dolgu = space
                             k_banka_kodu = ls_bank_file-banknumber(4)
-                            k_sube_kodu = ls_bank_file-banknumber+4(5)
+                            k_sube_kodu = ls_bank_file-banknumber+5(5)
                             k_hesap_no =  ls_bank_file-bankaccount
                             sat_mus_no =  COND #( WHEN ls_bank_file-supplier IS INITIAL THEN ls_bank_file-customer ELSE ls_bank_file-supplier )
                             alıcı_adı = COND #( WHEN ls_bank_file-suppliername IS INITIAL THEN ls_bank_file-customername ELSE ls_bank_file-suppliername )
