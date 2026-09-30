@@ -70,7 +70,11 @@
           WHEN '0032'."TEB
             lt_txt_file = lo_bank->file_0032(  ).
         ENDCASE.
-        ls_txt_file = concat_lines_of( table = lt_txt_file sep = cl_abap_char_utilities=>newline ).
+        IF ls_header-companybankinternalid(4) = '0062'.
+          ls_txt_file = concat_lines_of( table = lt_txt_file sep = cl_abap_char_utilities=>cr_lf ).
+        ELSE.
+          ls_txt_file = concat_lines_of( table = lt_txt_file sep = cl_abap_char_utilities=>newline ).
+        ENDIF.
       ENDIF.
       IF lt_txt_file IS NOT INITIAL.
         IF ms_request-download IS INITIAL. "dosya gönder
