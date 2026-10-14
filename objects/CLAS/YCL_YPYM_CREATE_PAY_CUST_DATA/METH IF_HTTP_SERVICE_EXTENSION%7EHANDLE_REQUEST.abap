@@ -87,6 +87,7 @@
              bank~bankbranch       AS supplierbankbrunch
       FROM @lt_customer AS bsid
       INNER JOIN i_businesspartnerbank AS bpbank ON bpbank~businesspartner = bsid~customer
+                                                and bpbank~BankAccountReferenceText = bsid~currency
       INNER JOIN i_bank_2 AS bank ON bank~bankcountry = bpbank~bankcountrykey
                                       AND bank~bankinternalid = bpbank~banknumber
       ORDER BY bsid~customer
