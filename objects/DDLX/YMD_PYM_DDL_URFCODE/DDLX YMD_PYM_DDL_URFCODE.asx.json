@@ -7,9 +7,9 @@
     "DDLXNAME":"YMD_PYM_DDL_URFCODE",
     "VERSION":"A",
     "CHANGED_BY":"SAP_CUSTOMER",
-    "CHANGED_ON":"2025-03-04",
-    "CHANGED_AT":"16:22:58",
-    "UUID":"41DA9F4B20AC1EEFBEA29DEB3ED583C4",
+    "CHANGED_ON":"2026-11-16",
+    "CHANGED_AT":"20:15:37",
+    "UUID":"FA163EBBCF7E1FE1B8BF4F91E914ACB1",
     "ABAP_LANGUAGE_VERSION":"5"
    }
   ]
@@ -34,7 +34,7 @@
     "DDLXNAME":"YMD_PYM_DDL_URFCODE",
     "VERSION":"A",
     "UUID":"",
-    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'Banka URF Kodu',\r\n                typeName: 'Banka URF Kodu',\r\n                title:{ type: #STANDARD, label: 'Banka URF Kodu', value: 'Companycode' }\r\n           }\r\n}\r\nannotate entity Yc_PYM_DDL_URFCODE\r\n    with \r\n{\r\n  @UI.facet: [ { id:            'URFCode',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'Banka URF Kodu',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }                 \r\nCompanycode;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\nBankshortid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\nAccountshortid;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\nFirmCode;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\nPayNamespace;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\nConsNamespace;\r\n  @UI: { lineItem: [ { position: 70, importance: #HIGH } ] , identification: [{ position: 70 }] }\r\nMbb;\r\n    \r\n}"
+    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'Banka URF Kodu',\r\n                typeName: 'Banka URF Kodu',\r\n                title:{ type: #STANDARD, label: 'Banka URF Kodu', value: 'Companycode' }\r\n           }\r\n}\r\nannotate entity Yc_PYM_DDL_URFCODE with\r\n{\r\n  @UI.facet: [ { id:            'URFCode',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'Banka URF Kodu',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_CompanyCode', element: 'CompanyCode' }}]\r\n  Companycode;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBank'\r\n    },\r\n    additionalBinding: [\r\n      {\r\n        localElement: 'Companycode',\r\n        element: 'CompanyCode',\r\n        usage: #FILTER\r\n      }\r\n    ]\r\n  }]\r\n  Bankshortid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBankAccount'\r\n    },\r\n    additionalBinding: [\r\n      {\r\n        localElement: 'Companycode',\r\n        element: 'CompanyCode',\r\n        usage: #FILTER\r\n      },\r\n      {\r\n        localElement: 'Bankshortid',\r\n        element: 'HouseBank',\r\n        usage: #FILTER\r\n      }\r\n    ]\r\n  }]\r\n  Accountshortid;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\n  FirmCode;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\n  PayNamespace;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\n  ConsNamespace;\r\n  @UI: { lineItem: [ { position: 70, importance: #HIGH } ] , identification: [{ position: 70 }] }\r\n  Mbb;\r\n\r\n}"
    }
   ]
  },
@@ -80,6 +80,62 @@
    {
     "DDLXNAME":"YMD_PYM_DDL_URFCODE",
     "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Companycode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Bankshortid'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBankAccount'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
     "NAME":"UI.IDENTIFICATION$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"30"
@@ -101,6 +157,41 @@
    {
     "DDLXNAME":"YMD_PYM_DDL_URFCODE",
     "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Companycode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
     "NAME":"UI.IDENTIFICATION$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"20"
@@ -118,6 +209,20 @@
     "NAME":"UI.LINEITEM$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"20"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'I_CompanyCode'"
    },
    {
     "DDLXNAME":"YMD_PYM_DDL_URFCODE",
@@ -332,8 +437,8 @@
     "EXTENDED_ARTIFACT":"YC_PYM_DDL_URFCODE",
     "VARIANT":"",
     "LAYER":1500,
-    "DT_UUID":"41DA9F4B20AC1EEFBEA29DEB3ED583C4",
-    "RT_HASH":"AAEE25C6769579F73B4A6EADC90F4BE8E7F72CFC",
+    "DT_UUID":"FA163EBBCF7E1FE1B8BF4F91E914ACB1",
+    "RT_HASH":"95725C8A82E3A63946EF6A2906112C8148221AFD",
     "GEN_VERSION":"0",
     "TYPE":"0"
    }
@@ -352,6 +457,66 @@
     "REF_OBJECT_SUBTYPE":"DOF",
     "REF_OBJECT_NAME":"YC_PYM_DDL_URFCODE",
     "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "PATH":"COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_URFCODE",
+    "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.LOCALELEMENT",
+    "PATH":"BANKSHORTID",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_URFCODE",
+    "REF_OBJECT_ELEMENT":"BANKSHORTID"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "PATH":"COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_URFCODE",
+    "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_URFCODE",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"I_COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"I_COMPANYCODE",
+    "REF_OBJECT_ELEMENT":""
    }
   ]
  },

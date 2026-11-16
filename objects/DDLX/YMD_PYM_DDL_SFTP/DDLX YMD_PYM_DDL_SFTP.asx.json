@@ -7,9 +7,9 @@
     "DDLXNAME":"YMD_PYM_DDL_SFTP",
     "VERSION":"A",
     "CHANGED_BY":"SAP_CUSTOMER",
-    "CHANGED_ON":"2025-03-04",
-    "CHANGED_AT":"16:22:01",
-    "UUID":"41DA9F4B20AC1EEFBEA299A6C9A903C4",
+    "CHANGED_ON":"2026-11-16",
+    "CHANGED_AT":"20:23:29",
+    "UUID":"FA163EBBCF7E1FE1B8BF72A7ADCAECB1",
     "ABAP_LANGUAGE_VERSION":"5"
    }
   ]
@@ -34,7 +34,7 @@
     "DDLXNAME":"YMD_PYM_DDL_SFTP",
     "VERSION":"A",
     "UUID":"",
-    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'SFTP Bilgileri',\r\n                typeName: 'SFTP Bilgileri',\r\n                title:{ type: #STANDARD, label: 'SFTP Bilgileri', value: 'Companycode' }\r\n           }\r\n}\r\nannotate entity YC_PYM_DDL_SFTP with\r\n{\r\n  @UI.facet: [ { id:            'SFTP',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'SFTP Bilgileri',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }\r\n  Companycode;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\n  Bankshortid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\n  Accountshortid;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\n  Direction;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\n  HostName;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\n  SshKey;\r\n  @UI: { lineItem: [ { position: 70, importance: #HIGH } ] , identification: [{ position: 70 }] }\r\n  Username;\r\n  @UI: { lineItem: [ { position: 80, importance: #HIGH } ] , identification: [{ position: 80 }] }\r\n  Password;\r\n  @UI: { lineItem: [ { position: 90, importance: #HIGH } ] , identification: [{ position: 90 }] }\r\n  SftpPath;\r\n  @UI: { lineItem: [ { position: 100, importance: #HIGH } ] , identification: [{ position: 100 }] }\r\n  FileExt;\r\n  @UI: { lineItem: [ { position: 110, importance: #HIGH } ] , identification: [{ position: 110 }] }\r\n  SftpTarget;\r\n  @UI: { lineItem: [ { position: 120, importance: #HIGH } ] , identification: [{ position: 120 }] }\r\n  CpiUser;\r\n  @UI: { lineItem: [ { position: 130, importance: #HIGH } ] , identification: [{ position: 130 }] }\r\n  CpiPassword;\r\n  @UI: { lineItem: [ { position: 140, importance: #HIGH } ] , identification: [{ position: 140 }] }\r\n  CpiUrl;\r\n\r\n}"
+    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'SFTP Bilgileri',\r\n                typeName: 'SFTP Bilgileri',\r\n                title:{ type: #STANDARD, label: 'SFTP Bilgileri', value: 'Companycode' }\r\n           }\r\n}\r\nannotate entity YC_PYM_DDL_SFTP with\r\n{\r\n  @UI.facet: [ { id:            'SFTP',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'SFTP Bilgileri',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_CompanyCode', element: 'CompanyCode' }}]  \r\n  Companycode;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBank'\r\n    },\r\n    additionalBinding: [\r\n      {\r\n        localElement: 'Companycode',\r\n        element: 'CompanyCode',\r\n        usage: #FILTER\r\n      }\r\n    ]\r\n  }]  \r\n  Bankshortid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBankAccount'\r\n    },\r\n    additionalBinding: [\r\n      {\r\n        localElement: 'Companycode',\r\n        element: 'CompanyCode',\r\n        usage: #FILTER\r\n      },\r\n      {\r\n        localElement: 'Bankshortid',\r\n        element: 'HouseBank',\r\n        usage: #FILTER\r\n      }\r\n    ]\r\n  }]    \r\n  Accountshortid;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\n  Direction;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\n  HostName;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\n  SshKey;\r\n  @UI: { lineItem: [ { position: 70, importance: #HIGH } ] , identification: [{ position: 70 }] }\r\n  Username;\r\n  @UI: { lineItem: [ { position: 80, importance: #HIGH } ] , identification: [{ position: 80 }] }\r\n  Password;\r\n  @UI: { lineItem: [ { position: 90, importance: #HIGH } ] , identification: [{ position: 90 }] }\r\n  SftpPath;\r\n  @UI: { lineItem: [ { position: 100, importance: #HIGH } ] , identification: [{ position: 100 }] }\r\n  FileExt;\r\n  @UI: { lineItem: [ { position: 110, importance: #HIGH } ] , identification: [{ position: 110 }] }\r\n  SftpTarget;\r\n  @UI: { lineItem: [ { position: 120, importance: #HIGH } ] , identification: [{ position: 120 }] }\r\n  CpiUser;\r\n  @UI: { lineItem: [ { position: 130, importance: #HIGH } ] , identification: [{ position: 130 }] }\r\n  CpiPassword;\r\n  @UI: { lineItem: [ { position: 140, importance: #HIGH } ] , identification: [{ position: 140 }] }\r\n  CpiUrl;\r\n\r\n}"
    }
   ]
  },
@@ -80,6 +80,62 @@
    {
     "DDLXNAME":"YMD_PYM_DDL_SFTP",
     "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Companycode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Bankshortid'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBankAccount'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
     "NAME":"UI.IDENTIFICATION$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"30"
@@ -101,6 +157,41 @@
    {
     "DDLXNAME":"YMD_PYM_DDL_SFTP",
     "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Companycode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
     "NAME":"UI.IDENTIFICATION$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"20"
@@ -118,6 +209,20 @@
     "NAME":"UI.LINEITEM$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"20"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'CompanyCode'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'I_CompanyCode'"
    },
    {
     "DDLXNAME":"YMD_PYM_DDL_SFTP",
@@ -479,8 +584,8 @@
     "EXTENDED_ARTIFACT":"YC_PYM_DDL_SFTP",
     "VARIANT":"",
     "LAYER":1500,
-    "DT_UUID":"41DA9F4B20AC1EEFBEA299A6C9A903C4",
-    "RT_HASH":"EB713203A43EE9E7564EA18DBC0B7A5AB4F49246",
+    "DT_UUID":"FA163EBBCF7E1FE1B8BF72A7ADCAECB1",
+    "RT_HASH":"C011C9434071DDDF8BF059498672E1AE37AFCA97",
     "GEN_VERSION":"0",
     "TYPE":"0"
    }
@@ -499,6 +604,66 @@
     "REF_OBJECT_SUBTYPE":"DOF",
     "REF_OBJECT_NAME":"YC_PYM_DDL_SFTP",
     "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "PATH":"COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_SFTP",
+    "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$2$.LOCALELEMENT",
+    "PATH":"BANKSHORTID",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_SFTP",
+    "REF_OBJECT_ELEMENT":"BANKSHORTID"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "PATH":"COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_SFTP",
+    "REF_OBJECT_ELEMENT":"COMPANYCODE"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_DDL_SFTP",
+    "ELEMENT":"COMPANYCODE",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"I_COMPANYCODE",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"I_COMPANYCODE",
+    "REF_OBJECT_ELEMENT":""
    }
   ]
  },

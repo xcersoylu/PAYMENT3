@@ -53,8 +53,8 @@
                                                                     approvementstatus = COND #( WHEN ls_approver-approvergroupsequence = '01' THEN mc_inprocess ELSE mc_waiting ) ) ) .
             INSERT ypym_t_approve FROM TABLE @lt_approve.
             lv_paymentnumber = |{ lv_paymentnumber ALPHA = OUT }|. CONDENSE lv_paymentnumber NO-GAPS.
-            lv_subject = |{ lv_paymentnumber } nolu ödeme onayınızı bekliyor.|.
-            lv_content = |{ lv_paymentnumber } nolu ödeme onayınızı bekliyor.|.
+            lv_subject = |{ lv_paymentnumber ALPHA = OUT } nolu ödeme onayınızı bekliyor.|.
+            lv_content = |{ lv_paymentnumber ALPHA = OUT } nolu ödeme onayınızı bekliyor.|.
             ycl_pym_approvement=>send_mail(
               iv_sender    = ycl_pym_approvement=>get_email( CONV #( cl_abap_context_info=>get_user_technical_name(  ) ) )
               it_recipient = VALUE #( FOR ls_recipient IN lt_approvers WHERE ( approvergroupsequence = '01' ) ( CORRESPONDING #( ls_recipient ) ) )

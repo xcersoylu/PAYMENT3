@@ -7,9 +7,9 @@
     "DDLXNAME":"YMD_PYM_BANK",
     "VERSION":"A",
     "CHANGED_BY":"SAP_CUSTOMER",
-    "CHANGED_ON":"2024-09-06",
-    "CHANGED_AT":"11:02:55",
-    "UUID":"CF477070255A1EEF9B87F22F8139C193",
+    "CHANGED_ON":"2026-11-16",
+    "CHANGED_AT":"20:22:05",
+    "UUID":"FA163EBBCF7E1FE1B8BF6C7768E14CB1",
     "ABAP_LANGUAGE_VERSION":"5"
    }
   ]
@@ -34,7 +34,7 @@
     "DDLXNAME":"YMD_PYM_BANK",
     "VERSION":"A",
     "UUID":"",
-    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'Ödeme Listesi Banka Bakımı',\r\n                typeName: 'Ödeme Listesi Banka Bakımı',\r\n                title:{ type: #STANDARD, label: 'Ödeme Listesi Banka Bakımı', value: 'Bankcountry' }\r\n           }\r\n}\r\nannotate entity YC_PYM_DDL_BANK with\r\n{\r\n  @UI.facet: [ { id:            'SirketKodu',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'Şirket Kodu Parametreleri',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Country', element: 'Country' }}]\r\n  Bankcountry;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Bank_2', element: 'BankInternalID' }}]  \r\n  Bankinternalid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Currency', element: 'Currency' }}]    \r\n  Currency;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\n  Bankshortid;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\n  Accountshortid;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\n  Bankname;\r\n\r\n}"
+    "SOURCE":"@Metadata.layer: #CORE\r\n@UI:{\r\nheaderInfo:{\r\n                typeNamePlural: 'Ödeme Listesi Banka Bakımı',\r\n                typeName: 'Ödeme Listesi Banka Bakımı',\r\n                title:{ type: #STANDARD, label: 'Ödeme Listesi Banka Bakımı', value: 'Bankcountry' }\r\n           }\r\n}\r\nannotate entity YC_PYM_DDL_BANK with\r\n{\r\n  @UI.facet: [ { id:            'SirketKodu',\r\n                 purpose:       #STANDARD,\r\n                 type:          #IDENTIFICATION_REFERENCE,\r\n                 label:         'Şirket Kodu Parametreleri',\r\n                 position:      10 }  ]\r\n  @UI: { lineItem: [ { position: 10, importance: #HIGH } ] , identification: [{ position: 10 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Country', element: 'Country' }}]\r\n  Bankcountry;\r\n  @UI: { lineItem: [ { position: 20, importance: #HIGH } ] , identification: [{ position: 20 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Bank_2', element: 'BankInternalID' }}]  \r\n  Bankinternalid;\r\n  @UI: { lineItem: [ { position: 30, importance: #HIGH } ] , identification: [{ position: 30 }] }\r\n  @Consumption.valueHelpDefinition: [ { entity: { name: 'I_Currency', element: 'Currency' }}]    \r\n  Currency;\r\n  @UI: { lineItem: [ { position: 40, importance: #HIGH } ] , identification: [{ position: 40 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBank'\r\n    }\r\n  }]  \r\n  Bankshortid;\r\n  @UI: { lineItem: [ { position: 50, importance: #HIGH } ] , identification: [{ position: 50 }] }\r\n  @Consumption.valueHelpDefinition: [{\r\n    entity: {\r\n      name: 'YVH_PYM_HOUSEBANKACCOUNT',\r\n      element: 'HouseBankAccount'\r\n    },\r\n    additionalBinding: [\r\n      {\r\n        localElement: 'Bankshortid',\r\n        element: 'HouseBank',\r\n        usage: #FILTER\r\n      }\r\n    ]\r\n  }]  \r\n  Accountshortid;\r\n  @UI: { lineItem: [ { position: 60, importance: #HIGH } ] , identification: [{ position: 60 }] }\r\n  Bankname;\r\n\r\n}"
    }
   ]
  },
@@ -76,6 +76,41 @@
     "NAME":"UI.HEADERINFO.TYPENAMEPLURAL",
     "ELEMENT_TYPE":"N",
     "VALUE":"'Ödeme Listesi Banka Bakımı'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'Bankshortid'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.USAGE",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"#FILTER"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBankAccount'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
    },
    {
     "DDLXNAME":"YMD_PYM_BANK",
@@ -227,6 +262,20 @@
    {
     "DDLXNAME":"YMD_PYM_BANK",
     "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.ELEMENT",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'HouseBank'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "ELEMENT_TYPE":"S",
+    "VALUE":"'YVH_PYM_HOUSEBANKACCOUNT'"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"BANKSHORTID",
     "NAME":"UI.IDENTIFICATION$1$.POSITION",
     "ELEMENT_TYPE":"S",
     "VALUE":"40"
@@ -353,8 +402,8 @@
     "EXTENDED_ARTIFACT":"YC_PYM_DDL_BANK",
     "VARIANT":"",
     "LAYER":1500,
-    "DT_UUID":"CF477070255A1EEF9B87F22F8139C193",
-    "RT_HASH":"B3A78CA0DAF2D6920BDE30CFE8CF21D890EADB3C",
+    "DT_UUID":"FA163EBBCF7E1FE1B8BF6C7768E14CB1",
+    "RT_HASH":"C166B71A3D6B20AFB6C1BA707EC1F6EC534F642A",
     "GEN_VERSION":"0",
     "TYPE":"0"
    }
@@ -376,6 +425,26 @@
    },
    {
     "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ADDITIONALBINDING$1$.LOCALELEMENT",
+    "PATH":"BANKSHORTID",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DOF",
+    "REF_OBJECT_NAME":"YC_PYM_DDL_BANK",
+    "REF_OBJECT_ELEMENT":"BANKSHORTID"
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"ACCOUNTSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
     "ELEMENT":"BANKCOUNTRY",
     "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
     "PATH":"I_COUNTRY",
@@ -392,6 +461,16 @@
     "REF_OBJECT_TYPE":"STOB",
     "REF_OBJECT_SUBTYPE":"DO",
     "REF_OBJECT_NAME":"I_BANK_2",
+    "REF_OBJECT_ELEMENT":""
+   },
+   {
+    "DDLXNAME":"YMD_PYM_BANK",
+    "ELEMENT":"BANKSHORTID",
+    "NAME":"CONSUMPTION.VALUEHELPDEFINITION$1$.ENTITY.NAME",
+    "PATH":"YVH_PYM_HOUSEBANKACCOUNT",
+    "REF_OBJECT_TYPE":"STOB",
+    "REF_OBJECT_SUBTYPE":"DO",
+    "REF_OBJECT_NAME":"YVH_PYM_HOUSEBANKACCOUNT",
     "REF_OBJECT_ELEMENT":""
    },
    {
