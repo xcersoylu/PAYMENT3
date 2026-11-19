@@ -19,6 +19,7 @@
               documentitemtext              TYPE sgtxt,
               specialglcode                 TYPE ypym_e_umskz,
               taxcode                       TYPE mwskz,
+              profitcenter                  TYPE prctr,
               _currencyamount               TYPE tt_currencyamount,
             END OF ty_glitem,
             BEGIN OF ty_apitems, "lifnr
@@ -40,6 +41,7 @@
     DATA lt_je             TYPE TABLE FOR ACTION IMPORT i_journalentrytp~post.
     DATA lt_glitem         TYPE TABLE OF ty_glitem.
     DATA lt_apitem         TYPE TABLE OF ty_apitems.
+    DATA lv_glaccountlineitem TYPE n LENGTH 3.
     DATA(lv_request_body) = request->get_text( ).
     DATA(lv_get_method) = request->get_method( ).
     /ui2/cl_json=>deserialize( EXPORTING json = lv_request_body CHANGING data = ms_request ).
@@ -52,26 +54,65 @@
       APPEND VALUE #( messagetype = 'E' message = lv_message ) TO ms_response-messages.
     ENDIF.
     IF ms_response-messages IS INITIAL.
+      SELECT SINGLE value FROM ypym_t_parameter WHERE parametername = 'ACCOUNTING_DOCUMENT'
+                                                 AND parameterkey = 'PROFIT_CENTER'
+      INTO @DATA(lv_profit_center).
+      IF lv_profit_center = abap_true.
+        SELECT jeitem~companycode,
+               jeitem~accountingdocument,
+               jeitem~fiscalyear,
+               jeitem~supplier,
+               jeitem~profitcenter,
+               jeitem~amountintransactioncurrency
+        FROM @ms_request-items AS items INNER JOIN i_journalentryitem AS jeitem ON jeitem~companycode = items~companycode
+                                                                               AND jeitem~accountingdocument = items~accountingdocument
+                                                                               AND jeitem~fiscalyear = items~fiscalyear
+                                                                               AND jeitem~supplier = items~supplier
+        WHERE jeitem~sourceledger = '0L'
+          AND jeitem~ledger = '0L'
+        INTO TABLE @DATA(lt_profitcenter).
+      ENDIF.
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).
         IF <ls_item>-paymentdocument IS INITIAL.
           APPEND INITIAL LINE TO lt_je ASSIGNING FIELD-SYMBOL(<fs_je>).
           TRY.
               <fs_je>-%cid = to_upper( cl_uuid_factory=>create_system_uuid( )->create_uuid_x16( ) ).
+              IF lv_profit_center = abap_true.
+                lv_glaccountlineitem = '001'.
+                LOOP AT lt_profitcenter INTO DATA(ls_profitcenter) WHERE companycode = <ls_item>-companycode
+                                                                     AND accountingdocument = <ls_item>-accountingdocument
+                                                                     AND fiscalyear = <ls_item>-fiscalyear
+                                                                     AND supplier = <ls_item>-supplier.
+                  APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                  glaccount                     = <ls_item>-glaccount
+                                  documentitemtext              = <ls_item>-suppliername
+                                  profitcenter                  = ls_profitcenter-profitcenter
+                                  _currencyamount = VALUE #( ( currencyrole = '00'
+                                                              journalentryitemamount = -1 * abs( ls_profitcenter-amountintransactioncurrency )
+                                                              currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
+                  lv_glaccountlineitem += 1.
+                ENDLOOP.
+                APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                supplier                      = <ls_item>-supplier
+                                documentitemtext              = 'Havale'
+                                _currencyamount = VALUE #( ( currencyrole = '00'
+                                                           journalentryitemamount = abs( <ls_item>-paymentamount )
+                                                           currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+              ELSE.
+                APPEND VALUE #( glaccountlineitem             = |001|
+                                glaccount                     = <ls_item>-glaccount
+                                documentitemtext              = <ls_item>-suppliername
+                                _currencyamount = VALUE #( ( currencyrole = '00'
+                                                            journalentryitemamount = -1 * abs( <ls_item>-paymentamount )
+                                                            currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
 
-              APPEND VALUE #( glaccountlineitem             = |001|
-                              glaccount                     = <ls_item>-glaccount
-                              documentitemtext              = <ls_item>-suppliername
-                              _currencyamount = VALUE #( ( currencyrole = '00'
-                                                          journalentryitemamount = -1 * abs( <ls_item>-paymentamount )
-                                                          currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
-
-              APPEND VALUE #( glaccountlineitem             = |002|
-                              supplier                      = <ls_item>-supplier
-                              documentitemtext              = 'Havale'
-                              _currencyamount = VALUE #( ( currencyrole = '00'
-                                                         journalentryitemamount = abs( <ls_item>-paymentamount )
-                                                         currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
-
+                APPEND VALUE #( glaccountlineitem             = |002|
+                                supplier                      = <ls_item>-supplier
+                                documentitemtext              = 'Havale'
+                                _currencyamount = VALUE #( ( currencyrole = '00'
+                                                           journalentryitemamount = abs( <ls_item>-paymentamount )
+                                                           currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+              ENDIF.
               <fs_je>-%param = VALUE #( companycode                  = <ls_item>-companycode
                                         documentreferenceid          = <ls_item>-documentreferenceid
                                         createdbyuser                = sy-uname
