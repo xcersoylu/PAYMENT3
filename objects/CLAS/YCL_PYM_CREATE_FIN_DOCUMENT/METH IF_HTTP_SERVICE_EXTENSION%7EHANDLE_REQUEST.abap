@@ -90,14 +90,21 @@
                                   _currencyamount = VALUE #( ( currencyrole = '00'
                                                               journalentryitemamount = -1 * abs( ls_profitcenter-amountintransactioncurrency )
                                                               currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
-                  lv_glaccountlineitem += 1.
+                   lv_glaccountlineitem += 1.
                 ENDLOOP.
-                APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
-                                supplier                      = <ls_item>-supplier
-                                documentitemtext              = 'Havale'
-                                _currencyamount = VALUE #( ( currencyrole = '00'
-                                                           journalentryitemamount = abs( <ls_item>-paymentamount )
-                                                           currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+                LOOP AT lt_profitcenter INTO ls_profitcenter WHERE companycode = <ls_item>-companycode
+                                                               AND accountingdocument = <ls_item>-accountingdocument
+                                                               AND fiscalyear = <ls_item>-fiscalyear
+                                                               AND supplier = <ls_item>-supplier.
+                  APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                  supplier                      = <ls_item>-supplier
+                                  documentitemtext              = 'Havale'
+                                  profitcenter                  = ls_profitcenter-profitcenter
+                                  _currencyamount = VALUE #( ( currencyrole = '00'
+                                                             journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
+                                                             currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+                    lv_glaccountlineitem += 1.
+                ENDLOOP.
               ELSE.
                 APPEND VALUE #( glaccountlineitem             = |001|
                                 glaccount                     = <ls_item>-glaccount
