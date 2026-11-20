@@ -31,7 +31,7 @@
                             aparaccount  = is_item-supplier
                             fiscal_year  = is_item-documentdate(4)
                             accounting_document = is_item-accountingdocument
-                            accounting_document_item = ls_profitcenter-accountingdocumentitem
+                            accounting_document_item = ls_profitcenter-ledgergllineitem
                            ) TO lt_aparitems.
 
             APPEND VALUE #( company_code = is_item-companycode
@@ -40,7 +40,7 @@
                             fiscal_year  = is_item-paymentdocumentyear
                             accounting_document = is_item-paymentdocument
                             accounting_document_item = VALUE #( mt_clearing_document[ accountingdocument = is_item-accountingdocument
-                                                                                      accountingdocumentitem = ls_profitcenter-accountingdocumentitem ]-supplieritem OPTIONAL )
+                                                                                      ledgergllineitem = ls_profitcenter-ledgergllineitem ]-supplieritem OPTIONAL )
                            ) TO lt_aparitems.
 
           ENDLOOP.

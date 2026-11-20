@@ -64,7 +64,8 @@
                jeitem~fiscalyear,
                jeitem~supplier,
                jeitem~profitcenter,
-               jeitem~amountintransactioncurrency
+               jeitem~amountintransactioncurrency,
+               jeitem~ledgergllineitem
         FROM @ms_request-items AS items INNER JOIN i_journalentryitem AS jeitem ON jeitem~companycode = items~companycode
                                                                                AND jeitem~accountingdocument = items~accountingdocument
                                                                                AND jeitem~fiscalyear = items~fiscalyear
@@ -100,6 +101,7 @@
                                                                AND supplier = <ls_item>-supplier.
                   APPEND VALUE #( accountingdocument = <ls_item>-accountingdocument
                                   accountingdocumentitem = ls_profitcenter-accountingdocumentitem
+                                  ledgergllineitem = ls_profitcenter-ledgergllineitem
                                   supplieritem = lv_glaccountlineitem ) TO mt_clearing_document.
                   APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
                                   supplier                      = <ls_item>-supplier

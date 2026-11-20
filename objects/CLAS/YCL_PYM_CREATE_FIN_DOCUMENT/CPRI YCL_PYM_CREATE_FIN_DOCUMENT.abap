@@ -3,6 +3,7 @@
               companycode                 TYPE i_journalentryitem-companycode,
               accountingdocument          TYPE i_journalentryitem-accountingdocument,
               accountingdocumentitem      TYPE i_journalentryitem-accountingdocumentitem,
+              ledgergllineitem            TYPE i_journalentryitem-ledgergllineitem,
               fiscalyear                  TYPE i_journalentryitem-fiscalyear,
               supplier                    TYPE i_journalentryitem-supplier,
               profitcenter                TYPE i_journalentryitem-profitcenter,
@@ -12,6 +13,7 @@
             BEGIN OF ty_clearing_document,
               accountingdocument     TYPE i_journalentryitem-accountingdocument,
               accountingdocumentitem TYPE i_journalentryitem-accountingdocumentitem,
+              ledgergllineitem       TYPE i_journalentryitem-ledgergllineitem,
               supplieritem           TYPE i_journalentryitem-supplier,
             END OF ty_clearing_document,
             tt_clearing_document TYPE TABLE OF ty_clearing_document WITH EMPTY KEY.
