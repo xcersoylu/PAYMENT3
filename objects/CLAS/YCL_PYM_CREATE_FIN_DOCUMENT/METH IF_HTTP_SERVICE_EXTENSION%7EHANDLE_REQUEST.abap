@@ -56,10 +56,11 @@
     IF ms_response-messages IS INITIAL.
       SELECT SINGLE value FROM ypym_t_parameter WHERE parametername = 'ACCOUNTING_DOCUMENT'
                                                  AND parameterkey = 'PROFIT_CENTER'
-      INTO @DATA(lv_profit_center).
-      IF lv_profit_center = abap_true.
+      INTO @mv_profit_center.
+      IF mv_profit_center = abap_true.
         SELECT jeitem~companycode,
                jeitem~accountingdocument,
+               jeitem~accountingdocumentitem,
                jeitem~fiscalyear,
                jeitem~supplier,
                jeitem~profitcenter,
@@ -70,16 +71,16 @@
                                                                                AND jeitem~supplier = items~supplier
         WHERE jeitem~sourceledger = '0L'
           AND jeitem~ledger = '0L'
-        INTO TABLE @DATA(lt_profitcenter).
+        INTO CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
       ENDIF.
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).
         IF <ls_item>-paymentdocument IS INITIAL.
           APPEND INITIAL LINE TO lt_je ASSIGNING FIELD-SYMBOL(<fs_je>).
           TRY.
               <fs_je>-%cid = to_upper( cl_uuid_factory=>create_system_uuid( )->create_uuid_x16( ) ).
-              IF lv_profit_center = abap_true.
+              IF mv_profit_center = abap_true.
                 lv_glaccountlineitem = '001'.
-                LOOP AT lt_profitcenter INTO DATA(ls_profitcenter) WHERE companycode = <ls_item>-companycode
+                LOOP AT mt_profitcenter INTO DATA(ls_profitcenter) WHERE companycode = <ls_item>-companycode
                                                                      AND accountingdocument = <ls_item>-accountingdocument
                                                                      AND fiscalyear = <ls_item>-fiscalyear
                                                                      AND supplier = <ls_item>-supplier.
@@ -90,12 +91,16 @@
                                   _currencyamount = VALUE #( ( currencyrole = '00'
                                                               journalentryitemamount = -1 * abs( ls_profitcenter-amountintransactioncurrency )
                                                               currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
-                   lv_glaccountlineitem += 1.
+                  lv_glaccountlineitem += 1.
                 ENDLOOP.
-                LOOP AT lt_profitcenter INTO ls_profitcenter WHERE companycode = <ls_item>-companycode
+                CLEAR mt_clearing_document.
+                LOOP AT mt_profitcenter INTO ls_profitcenter WHERE companycode = <ls_item>-companycode
                                                                AND accountingdocument = <ls_item>-accountingdocument
                                                                AND fiscalyear = <ls_item>-fiscalyear
                                                                AND supplier = <ls_item>-supplier.
+                  APPEND VALUE #( accountingdocument = <ls_item>-accountingdocument
+                                  accountingdocumentitem = ls_profitcenter-accountingdocumentitem
+                                  supplieritem = lv_glaccountlineitem ) TO mt_clearing_document.
                   APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
                                   supplier                      = <ls_item>-supplier
                                   documentitemtext              = 'Havale'
@@ -103,7 +108,7 @@
                                   _currencyamount = VALUE #( ( currencyrole = '00'
                                                              journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
                                                              currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
-                    lv_glaccountlineitem += 1.
+                  lv_glaccountlineitem += 1.
                 ENDLOOP.
               ELSE.
                 APPEND VALUE #( glaccountlineitem             = |001|
