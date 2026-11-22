@@ -72,6 +72,7 @@
                                                                                AND jeitem~supplier = items~supplier
         WHERE jeitem~sourceledger = '0L'
           AND jeitem~ledger = '0L'
+          AND jeitem~financialaccounttype = 'K'
         INTO CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
       ENDIF.
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).
@@ -94,15 +95,10 @@
                                                               currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
                   lv_glaccountlineitem += 1.
                 ENDLOOP.
-                CLEAR mt_clearing_document.
                 LOOP AT mt_profitcenter INTO ls_profitcenter WHERE companycode = <ls_item>-companycode
                                                                AND accountingdocument = <ls_item>-accountingdocument
                                                                AND fiscalyear = <ls_item>-fiscalyear
                                                                AND supplier = <ls_item>-supplier.
-                  APPEND VALUE #( accountingdocument = <ls_item>-accountingdocument
-                                  accountingdocumentitem = ls_profitcenter-accountingdocumentitem
-                                  ledgergllineitem = ls_profitcenter-ledgergllineitem
-                                  supplieritem = lv_glaccountlineitem ) TO mt_clearing_document.
                   APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
                                   supplier                      = <ls_item>-supplier
                                   documentitemtext              = 'Havale'

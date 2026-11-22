@@ -7,6 +7,7 @@
     DATA lt_aparitems TYPE ypym_journal_entry_cleari_tab3.
     DATA ls_partial TYPE ypym_amount.
     DATA ls_local_time_info TYPE ty_local_time_info.
+    DATA lv_referencedocumentitem TYPE ypym_journal_entry_clearing_r5-reference_document_item.
     TRY.
         DATA(destination) = cl_soap_destination_provider=>create_by_comm_arrangement(
           comm_scenario  = 'YCS_PYM_CLEARING' "VALUE #( lt_parameters[ parameter_key = 'COMM_SCENARIO' ]-parameter_value OPTIONAL )
@@ -22,27 +23,43 @@
           CATCH cx_abap_context_info_error.
         ENDTRY.
         IF mv_profit_center = abap_true.
-          LOOP AT mt_profitcenter INTO DATA(ls_profitcenter) WHERE companycode = is_item-companycode
-                                                              AND accountingdocument = is_item-accountingdocument
-                                                              AND fiscalyear = is_item-fiscalyear
-                                                              AND supplier = is_item-supplier.
-            APPEND VALUE #( company_code = is_item-companycode
+*faturanın satıcı kalemi ya da kalemleri bulunuyor.
+          SELECT * FROM i_operationalacctgdocitem WHERE companycode = @is_item-companycode
+                                                    AND  accountingdocument = @is_item-accountingdocument
+                                                    AND fiscalyear = @is_item-fiscalyear
+                                                    AND financialaccounttype = 'K'
+                                                    AND supplier = @is_item-supplier
+           INTO TABLE @DATA(lt_invoice_supplier_items).
+*ödeme belgesinin satıcı kalemleri
+          SELECT * FROM i_operationalacctgdocitem WHERE companycode = @is_item-companycode
+                                                    AND accountingdocument = @is_item-paymentdocument
+                                                    AND fiscalyear = @is_item-paymentdocumentyear
+                                                    AND financialaccounttype = 'K'
+                                                    AND supplier = @is_item-supplier
+           INTO TABLE @DATA(lt_payment_items).
+*faturanın satıcı kalemleri
+          lv_referencedocumentitem = 0.
+          LOOP AT lt_invoice_supplier_items INTO DATA(ls_invoice_supplier_item).
+            lv_referencedocumentitem += 1.
+            APPEND VALUE #( reference_document_item = lv_referencedocumentitem
+                            company_code = is_item-companycode
                             account_type = 'K'
                             aparaccount  = is_item-supplier
-                            fiscal_year  = is_item-documentdate(4)
+                            fiscal_year  = is_item-fiscalyear
                             accounting_document = is_item-accountingdocument
-                            accounting_document_item = ls_profitcenter-ledgergllineitem
+                            accounting_document_item = ls_invoice_supplier_item-accountingdocumentitem
                            ) TO lt_aparitems.
-
-            APPEND VALUE #( company_code = is_item-companycode
+          ENDLOOP.
+          LOOP AT lt_payment_items INTO DATA(ls_paymentitem).
+            lv_referencedocumentitem += 1.
+            APPEND VALUE #( reference_document_item = lv_referencedocumentitem
+                            company_code = is_item-companycode
                             account_type = 'K'
                             aparaccount  = is_item-supplier
                             fiscal_year  = is_item-paymentdocumentyear
                             accounting_document = is_item-paymentdocument
-                            accounting_document_item = VALUE #( mt_clearing_document[ accountingdocument = is_item-accountingdocument
-                                                                                      ledgergllineitem = ls_profitcenter-ledgergllineitem ]-supplieritem OPTIONAL )
+                            accounting_document_item = ls_paymentitem-accountingdocumentitem
                            ) TO lt_aparitems.
-
           ENDLOOP.
         ELSE.
 *kısmi ödeme mi ?
