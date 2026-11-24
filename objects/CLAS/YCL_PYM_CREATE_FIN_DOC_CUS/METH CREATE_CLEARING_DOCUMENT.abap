@@ -7,6 +7,7 @@
     DATA lt_aparitems TYPE ypym_journal_entry_cleari_tab3.
     DATA ls_partial TYPE ypym_amount.
     DATA ls_local_time_info TYPE ty_local_time_info.
+    DATA lv_referencedocumentitem TYPE ypym_journal_entry_clearing_r5-reference_document_item.
     TRY.
         DATA(destination) = cl_soap_destination_provider=>create_by_comm_arrangement(
           comm_scenario  = 'YCS_PYM_CLEARING' "VALUE #( lt_parameters[ parameter_key = 'COMM_SCENARIO' ]-parameter_value OPTIONAL )
@@ -21,40 +22,84 @@
             CONVERT DATE ls_local_time_info-date TIME ls_local_time_info-time INTO TIME STAMP ls_local_time_info-timestamp TIME ZONE 'UTC'.
           CATCH cx_abap_context_info_error.
         ENDTRY.
-*kısmi ödeme mi ?
-        IF is_item-paymentamount <> is_item-absoluteamountintransaccrcy.
-          ls_partial =  VALUE #( currency_code = is_item-transactioncurrency
-                                 content = is_item-absoluteamountintransaccrcy - is_item-paymentamount ).
-        ENDIF.
-        APPEND VALUE #( company_code = is_item-companycode
-                        account_type = 'D'
-                        aparaccount  = is_item-customer
-                        fiscal_year  = is_item-documentdate(4)
-                        accounting_document = is_item-accountingdocument
-                        accounting_document_item = is_item-accountingdocumentitem
-                       ) TO lt_aparitems.
-        IF ls_partial IS INITIAL.
-          APPEND VALUE #( company_code = is_item-companycode
-                          account_type = 'D'
-                          aparaccount  = is_item-customer
-                          fiscal_year  = is_item-paymentdocumentyear
-                          accounting_document = is_item-paymentdocument
-                          accounting_document_item = '002' "müşteri kalemi 2. kalem olduğu için
-                         ) TO lt_aparitems.
+        IF mv_profit_center = abap_true.
+*faturanın satıcı kalemi ya da kalemleri bulunuyor.
+          SELECT * FROM i_operationalacctgdocitem WHERE companycode = @is_item-companycode
+                                                    AND  accountingdocument = @is_item-accountingdocument
+                                                    AND fiscalyear = @is_item-fiscalyear
+                                                    AND financialaccounttype = 'S'
+                                                    AND customer = @is_item-customer
+           INTO TABLE @DATA(lt_invoice_customer_items).
+*ödeme belgesinin satıcı kalemleri
+          SELECT * FROM i_operationalacctgdocitem WHERE companycode = @is_item-companycode
+                                                    AND accountingdocument = @is_item-paymentdocument
+                                                    AND fiscalyear = @is_item-paymentdocumentyear
+                                                    AND financialaccounttype = 'S'
+                                                    AND customer = @is_item-customer
+           INTO TABLE @DATA(lt_payment_items).
+
+*faturanın satıcı kalemleri
+          lv_referencedocumentitem = 0.
+          LOOP AT lt_invoice_customer_items INTO DATA(ls_invoice_supplier_item).
+            lv_referencedocumentitem += 1.
+            APPEND VALUE #( reference_document_item = lv_referencedocumentitem
+                            company_code = is_item-companycode
+                            account_type = 'S'
+                            aparaccount  = is_item-customer
+                            fiscal_year  = is_item-fiscalyear
+                            accounting_document = is_item-accountingdocument
+                            accounting_document_item = ls_invoice_supplier_item-accountingdocumentitem
+                           ) TO lt_aparitems.
+          ENDLOOP.
+*ödeme belgesinin satıcı kalemleri
+          LOOP AT lt_payment_items INTO DATA(ls_paymentitem).
+            lv_referencedocumentitem += 1.
+            APPEND VALUE #( reference_document_item = lv_referencedocumentitem
+                            company_code = is_item-companycode
+                            account_type = 'S'
+                            aparaccount  = is_item-customer
+                            fiscal_year  = is_item-paymentdocumentyear
+                            accounting_document = is_item-paymentdocument
+                            accounting_document_item = ls_paymentitem-accountingdocumentitem
+                           ) TO lt_aparitems.
+          ENDLOOP.
+
         ELSE.
+*kısmi ödeme mi ?
+          IF is_item-paymentamount <> is_item-absoluteamountintransaccrcy.
+            ls_partial =  VALUE #( currency_code = is_item-transactioncurrency
+                                   content = is_item-absoluteamountintransaccrcy - is_item-paymentamount ).
+          ENDIF.
           APPEND VALUE #( company_code = is_item-companycode
                           account_type = 'D'
                           aparaccount  = is_item-customer
-                          fiscal_year  = is_item-paymentdocumentyear
-                          accounting_document = is_item-paymentdocument
-                          accounting_document_item = '002' "müşteri kalemi 2. kalem olduğu için
-                          other_deduction_amount_in_dsp = ls_partial
+                          fiscal_year  = is_item-documentdate(4)
+                          accounting_document = is_item-accountingdocument
+                          accounting_document_item = is_item-accountingdocumentitem
                          ) TO lt_aparitems.
+          IF ls_partial IS INITIAL.
+            APPEND VALUE #( company_code = is_item-companycode
+                            account_type = 'D'
+                            aparaccount  = is_item-customer
+                            fiscal_year  = is_item-paymentdocumentyear
+                            accounting_document = is_item-paymentdocument
+                            accounting_document_item = '002' "müşteri kalemi 2. kalem olduğu için
+                           ) TO lt_aparitems.
+          ELSE.
+            APPEND VALUE #( company_code = is_item-companycode
+                            account_type = 'D'
+                            aparaccount  = is_item-customer
+                            fiscal_year  = is_item-paymentdocumentyear
+                            accounting_document = is_item-paymentdocument
+                            accounting_document_item = '002' "müşteri kalemi 2. kalem olduğu için
+                            other_deduction_amount_in_dsp = ls_partial
+                           ) TO lt_aparitems.
+          ENDIF.
         ENDIF.
         APPEND VALUE #( message_header = VALUE #( id = VALUE #( content = 'PYM_CLEARING' )
                                                                             creation_date_time = ls_local_time_info-timestamp )
                         journal_entry = VALUE #( company_code              = is_item-companycode
-                                                 accounting_document_type  = 'DZ'
+                                                 accounting_document_type  = cond #( when mv_clearingdocumenttype is initial then 'DZ' else mv_clearingdocumenttype )
                                                  document_date             = ls_local_time_info-date
                                                  posting_date              = ls_local_time_info-date
                                                  currency_code             = is_item-transactioncurrency

@@ -54,6 +54,12 @@
       APPEND VALUE #( messagetype = 'E' message = lv_message ) TO ms_response-messages.
     ENDIF.
     IF ms_response-messages IS INITIAL.
+      SELECT SINGLE value FROM ypym_t_parameter WHERE parametername = 'SUPPLIER'
+                                                  AND parameterkey = 'CLEARING_DOCUMENT_TYPE'
+      INTO @mv_clearingdocumenttype.
+      SELECT SINGLE value FROM ypym_t_parameter WHERE parametername = 'SUPPLIER'
+                                                  AND parameterkey = 'PAYMENT_DOCUMENT_TYPE'
+      INTO @mv_paymentdocumenttype.
       SELECT SINGLE value FROM ypym_t_parameter WHERE parametername = 'ACCOUNTING_DOCUMENT'
                                                  AND parameterkey = 'PROFIT_CENTER'
       INTO @mv_profit_center.
@@ -127,7 +133,7 @@
                                         documentreferenceid          = <ls_item>-documentreferenceid
                                         createdbyuser                = sy-uname
                                         businesstransactiontype      = 'RFBU'
-                                        accountingdocumenttype       = 'KZ' "<ls_item>-document_type
+                                        accountingdocumenttype       = cond #( when mv_paymentdocumenttype is initial then 'KZ' else mv_paymentdocumenttype )
                                         documentdate                 = cl_abap_context_info=>get_system_date( )
                                         postingdate                  = cl_abap_context_info=>get_system_date( )
                                         accountingdocumentheadertext = |{ <ls_item>-paymentnumber ALPHA = OUT } satıcı ödeme kaydı|

@@ -50,6 +50,7 @@
                             accounting_document_item = ls_invoice_supplier_item-accountingdocumentitem
                            ) TO lt_aparitems.
           ENDLOOP.
+*ödeme belgesinin satıcı kalemleri
           LOOP AT lt_payment_items INTO DATA(ls_paymentitem).
             lv_referencedocumentitem += 1.
             APPEND VALUE #( reference_document_item = lv_referencedocumentitem
@@ -96,7 +97,7 @@
         APPEND VALUE #( message_header = VALUE #( id = VALUE #( content = 'PYM_CLEARING' )
                                                                             creation_date_time = ls_local_time_info-timestamp )
                         journal_entry = VALUE #( company_code              = is_item-companycode
-                                                 accounting_document_type  = 'KZ'
+                                                 accounting_document_type  = cond #( when mv_clearingdocumenttype is initial then 'KZ' else mv_clearingdocumenttype )
                                                  document_date             = ls_local_time_info-date
                                                  posting_date              = ls_local_time_info-date
                                                  currency_code             = is_item-transactioncurrency

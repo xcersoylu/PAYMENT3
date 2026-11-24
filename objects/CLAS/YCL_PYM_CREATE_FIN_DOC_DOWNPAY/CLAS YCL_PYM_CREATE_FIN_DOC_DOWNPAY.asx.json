@@ -115,6 +115,13 @@
     "CMPTYPE":0,
     "MTDTYPE":0,
     "MTDTYPE2":0
+   },
+   {
+    "CLSNAME":"YCL_PYM_CREATE_FIN_DOC_DOWNPAY",
+    "CMPNAME":"MV_PAYMENTDOCUMENTTYPE",
+    "CMPTYPE":0,
+    "MTDTYPE":0,
+    "MTDTYPE2":0
    }
   ]
  },
@@ -416,6 +423,65 @@
     "BCEVTCAT":0,
     "TYPESRC_LENG":0,
     "TYPESRC":""
+   },
+   {
+    "CLSNAME":"YCL_PYM_CREATE_FIN_DOC_DOWNPAY",
+    "CMPNAME":"MV_PAYMENTDOCUMENTTYPE",
+    "VERSION":1,
+    "ALIAS":"",
+    "REDEFIN":"",
+    "EXPOSURE":0,
+    "STATE":1,
+    "EDITORDER":6,
+    "LOCKED":"",
+    "DISPID":0,
+    "R3RELEASE":"920",
+    "AUTHOR":"",
+    "CREATEDON":"2026-11-23",
+    "CHANGEDBY":"",
+    "CHANGEDON":"0000-00-00",
+    "MTDDECLTYP":0,
+    "MTDABSTRCT":"",
+    "MTDFINAL":"",
+    "DSRNOTEOM":"",
+    "EDTX":"",
+    "MTDNEWEXC":"",
+    "MTDREPLACE":"",
+    "MTDOPTNL":"",
+    "MTDSQLSERVICE":"",
+    "MTDAMDPRDONLY":"",
+    "MTDAMDPCDSCLNT":"",
+    "MTDAMDPCLNTINDEP":"",
+    "ATTDECLTYP":0,
+    "ATTDYNAMIC":"",
+    "ATTGETMTD":"",
+    "ATTSETMTD":"",
+    "ATTRDONLY":"",
+    "ATTVALUE":"",
+    "ATTPERSIST":"",
+    "ATTBUSOBJ":"",
+    "ATTKEYFLD":"",
+    "ATTEXPVIRT":0,
+    "EVTDECLTYP":0,
+    "TYPDUMMY":"",
+    "TYPTYPE":1,
+    "TYPE":"BLART",
+    "TABLEOF":"",
+    "SRCROW1":0,
+    "SRCCOLUMN1":0,
+    "SRCROW2":0,
+    "SRCCOLUMN2":0,
+    "REFCLSNAME":"",
+    "REFINTNAME":"",
+    "REFCMPNAME":"",
+    "BCMTDINST":"",
+    "BCMTDCAT":0,
+    "BCMTDDIA":"",
+    "BCMTDCOM":"",
+    "BCMTDSYN":0,
+    "BCEVTCAT":0,
+    "TYPESRC_LENG":0,
+    "TYPESRC":""
    }
   ]
  },
@@ -450,6 +516,12 @@
    {
     "CLSNAME":"YCL_PYM_CREATE_FIN_DOC_DOWNPAY",
     "CMPNAME":"MS_RESPONSE",
+    "LANGU":"T",
+    "DESCRIPT":""
+   },
+   {
+    "CLSNAME":"YCL_PYM_CREATE_FIN_DOC_DOWNPAY",
+    "CMPNAME":"MV_PAYMENTDOCUMENTTYPE",
     "LANGU":"T",
     "DESCRIPT":""
    }
