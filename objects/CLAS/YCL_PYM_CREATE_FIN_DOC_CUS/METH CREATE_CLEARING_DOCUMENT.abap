@@ -99,7 +99,7 @@
         APPEND VALUE #( message_header = VALUE #( id = VALUE #( content = 'PYM_CLEARING' )
                                                                             creation_date_time = ls_local_time_info-timestamp )
                         journal_entry = VALUE #( company_code              = is_item-companycode
-                                                 accounting_document_type  = cond #( when mv_clearingdocumenttype is initial then 'DZ' else mv_clearingdocumenttype )
+                                                 accounting_document_type  = COND #( WHEN mv_clearingdocumenttype IS INITIAL THEN 'DZ' ELSE mv_clearingdocumenttype )
                                                  document_date             = ls_local_time_info-date
                                                  posting_date              = ls_local_time_info-date
                                                  currency_code             = is_item-transactioncurrency
@@ -124,6 +124,7 @@
                         AND fiscalyear         = @is_item-paymentdocumentyear
                         AND sourceledger       = '0L'
                         AND ledger             = '0L'
+                        AND financialaccounttype = 'S'
                         INTO @DATA(lv_clearing_document).
           IF sy-subrc = 0.
             ev_accountingdocument = lv_clearing_document.

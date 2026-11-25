@@ -8,6 +8,8 @@
               supplier                    TYPE i_journalentryitem-supplier,
               profitcenter                TYPE i_journalentryitem-profitcenter,
               amountintransactioncurrency TYPE i_journalentryitem-amountintransactioncurrency,
+              glaccount                   type hkont,
+              bsegline                    TYPE abap_bool,
             END OF ty_profitcenter,
             tt_profitcenter TYPE TABLE OF ty_profitcenter WITH EMPTY KEY.
     CONSTANTS mc_error          TYPE messagetyp VALUE 'E'.

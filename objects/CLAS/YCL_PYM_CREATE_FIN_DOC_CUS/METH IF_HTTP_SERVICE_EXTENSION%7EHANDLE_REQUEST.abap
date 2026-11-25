@@ -80,32 +80,34 @@
           AND jeitem~financialaccounttype = 'S'
         INTO CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
 *ÖDK lı kayıtlar buradan gelmiyor aşağıda bulunuyor.
-SELECT opitem~companycode,
-       opitem~accountingdocument,
-       opitem~accountingdocumentitem,
-       opitem~fiscalyear,
-       opitem~customer,
-       opitem~profitcenter,
-       opitem~amountintransactioncurrency
-  FROM @ms_request-items AS items
-  INNER JOIN i_operationalacctgdocitem AS opitem
-    ON opitem~companycode        = items~companycode
-   AND opitem~accountingdocument = items~accountingdocument
-   AND opitem~fiscalyear         = items~fiscalyear
-   AND opitem~customer           = items~customer
- WHERE opitem~financialaccounttype = 'K'
-   AND NOT EXISTS (
-       SELECT *
-         FROM i_journalentryitem AS jeitem
-        WHERE jeitem~companycode        = items~companycode
-          AND jeitem~accountingdocument = items~accountingdocument
-          AND jeitem~fiscalyear         = items~fiscalyear
-          AND jeitem~customer           = items~customer
-          AND jeitem~sourceledger       = '0L'
-          AND jeitem~ledger             = '0L'
-          AND jeitem~financialaccounttype = 'S'
-   )
- APPENDING CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
+        SELECT opitem~companycode,
+               opitem~accountingdocument,
+               opitem~accountingdocumentitem,
+               opitem~fiscalyear,
+               opitem~customer,
+               opitem~profitcenter,
+               opitem~amountintransactioncurrency,
+               'X' AS bsegline,
+               opitem~glaccount
+          FROM @ms_request-items AS items
+          INNER JOIN i_operationalacctgdocitem AS opitem
+            ON opitem~companycode        = items~companycode
+           AND opitem~accountingdocument = items~accountingdocument
+           AND opitem~fiscalyear         = items~fiscalyear
+           AND opitem~customer           = items~customer
+         WHERE opitem~financialaccounttype = 'K'
+           AND NOT EXISTS (
+               SELECT *
+                 FROM i_journalentryitem AS jeitem
+                WHERE jeitem~companycode        = items~companycode
+                  AND jeitem~accountingdocument = items~accountingdocument
+                  AND jeitem~fiscalyear         = items~fiscalyear
+                  AND jeitem~customer           = items~customer
+                  AND jeitem~sourceledger       = '0L'
+                  AND jeitem~ledger             = '0L'
+                  AND jeitem~financialaccounttype = 'S'
+           )
+         APPENDING CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
       ENDIF.
 
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).
@@ -132,13 +134,23 @@ SELECT opitem~companycode,
                                                                AND accountingdocument = <ls_item>-accountingdocument
                                                                AND fiscalyear = <ls_item>-fiscalyear
                                                                AND customer = <ls_item>-customer.
-                  APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
-                                  customer                      = <ls_item>-customer
-                                  documentitemtext              = 'Havale'
-                                  profitcenter                  = ls_profitcenter-profitcenter
-                                  _currencyamount = VALUE #( ( currencyrole = '00'
-                                                             journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
-                                                             currency = <ls_item>-transactioncurrency  ) ) ) TO lt_aritem.
+                  IF ls_profitcenter-bsegline IS INITIAL.
+                    APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                    customer                      = <ls_item>-customer
+                                    documentitemtext              = 'Havale'
+                                    profitcenter                  = ls_profitcenter-profitcenter
+                                    _currencyamount = VALUE #( ( currencyrole = '00'
+                                                               journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
+                                                               currency = <ls_item>-transactioncurrency  ) ) ) TO lt_aritem.
+                  ELSE.
+                    APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                    glaccount                     = ls_profitcenter-glaccount
+                                    documentitemtext              = <ls_item>-customername
+                                    profitcenter                  = ls_profitcenter-profitcenter
+                                    _currencyamount = VALUE #( ( currencyrole = '00'
+                                                                journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
+                                                                currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
+                  ENDIF.
                   lv_glaccountlineitem += 1.
                 ENDLOOP.
               ELSE.
@@ -160,7 +172,7 @@ SELECT opitem~companycode,
                                           documentreferenceid          = <ls_item>-documentreferenceid
                                           createdbyuser                = sy-uname
                                           businesstransactiontype      = 'RFBU'
-                                          accountingdocumenttype       = cond #( when mv_paymentdocumenttype is initial then 'DZ' else mv_paymentdocumenttype )
+                                          accountingdocumenttype       = COND #( WHEN mv_paymentdocumenttype IS INITIAL THEN 'DZ' ELSE mv_paymentdocumenttype )
                                           documentdate                 = cl_abap_context_info=>get_system_date( )
                                           postingdate                  = cl_abap_context_info=>get_system_date( )
                                           accountingdocumentheadertext = |{ <ls_item>-paymentnumber ALPHA = OUT } müşteri ödeme kaydı|

@@ -122,6 +122,7 @@
                         AND fiscalyear         = @is_item-paymentdocumentyear
                         AND sourceledger       = '0L'
                         AND ledger             = '0L'
+                        AND financialaccounttype = 'K'
                         INTO @DATA(lv_clearing_document).
           IF sy-subrc = 0.
             ev_accountingdocument = lv_clearing_document.

@@ -86,7 +86,9 @@
                opitem~fiscalyear,
                opitem~supplier,
                opitem~profitcenter,
-               opitem~amountintransactioncurrency
+               opitem~amountintransactioncurrency,
+               'X' AS bsegline,
+               opitem~glaccount
           FROM @ms_request-items AS items
           INNER JOIN i_operationalacctgdocitem AS opitem
             ON opitem~companycode        = items~companycode
@@ -131,13 +133,23 @@
                                                                AND accountingdocument = <ls_item>-accountingdocument
                                                                AND fiscalyear = <ls_item>-fiscalyear
                                                                AND supplier = <ls_item>-supplier.
+                  IF ls_profitcenter-bsegline IS INITIAL.
+                    APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
+                                    supplier                      = <ls_item>-supplier
+                                    documentitemtext              = 'Havale'
+                                    profitcenter                  = ls_profitcenter-profitcenter
+                                    _currencyamount = VALUE #( ( currencyrole = '00'
+                                                               journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
+                                                               currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+                  ELSE.
                   APPEND VALUE #( glaccountlineitem             = lv_glaccountlineitem
-                                  supplier                      = <ls_item>-supplier
-                                  documentitemtext              = 'Havale'
+                                  glaccount                     = ls_profitcenter-glaccount
+                                  documentitemtext              = <ls_item>-suppliername
                                   profitcenter                  = ls_profitcenter-profitcenter
                                   _currencyamount = VALUE #( ( currencyrole = '00'
-                                                             journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
-                                                             currency = <ls_item>-transactioncurrency  ) ) ) TO lt_apitem.
+                                                              journalentryitemamount = abs( ls_profitcenter-amountintransactioncurrency )
+                                                              currency = <ls_item>-transactioncurrency  ) )          ) TO lt_glitem.
+                  ENDIF.
                   lv_glaccountlineitem += 1.
                 ENDLOOP.
               ELSE.
