@@ -79,6 +79,33 @@
           AND jeitem~ledger = '0L'
           AND jeitem~financialaccounttype = 'S'
         INTO CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
+*ÖDK lı kayıtlar buradan gelmiyor aşağıda bulunuyor.
+SELECT opitem~companycode,
+       opitem~accountingdocument,
+       opitem~accountingdocumentitem,
+       opitem~fiscalyear,
+       opitem~customer,
+       opitem~profitcenter,
+       opitem~amountintransactioncurrency
+  FROM @ms_request-items AS items
+  INNER JOIN i_operationalacctgdocitem AS opitem
+    ON opitem~companycode        = items~companycode
+   AND opitem~accountingdocument = items~accountingdocument
+   AND opitem~fiscalyear         = items~fiscalyear
+   AND opitem~customer           = items~customer
+ WHERE opitem~financialaccounttype = 'K'
+   AND NOT EXISTS (
+       SELECT *
+         FROM i_journalentryitem AS jeitem
+        WHERE jeitem~companycode        = items~companycode
+          AND jeitem~accountingdocument = items~accountingdocument
+          AND jeitem~fiscalyear         = items~fiscalyear
+          AND jeitem~customer           = items~customer
+          AND jeitem~sourceledger       = '0L'
+          AND jeitem~ledger             = '0L'
+          AND jeitem~financialaccounttype = 'S'
+   )
+ APPENDING CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
       ENDIF.
 
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).

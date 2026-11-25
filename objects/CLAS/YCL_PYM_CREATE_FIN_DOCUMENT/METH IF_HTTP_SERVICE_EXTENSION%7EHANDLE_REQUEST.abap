@@ -70,8 +70,7 @@
                jeitem~fiscalyear,
                jeitem~supplier,
                jeitem~profitcenter,
-               jeitem~amountintransactioncurrency,
-               jeitem~ledgergllineitem
+               jeitem~amountintransactioncurrency
         FROM @ms_request-items AS items INNER JOIN i_journalentryitem AS jeitem ON jeitem~companycode = items~companycode
                                                                                AND jeitem~accountingdocument = items~accountingdocument
                                                                                AND jeitem~fiscalyear = items~fiscalyear
@@ -80,6 +79,33 @@
           AND jeitem~ledger = '0L'
           AND jeitem~financialaccounttype = 'K'
         INTO CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
+*ÖDK lı belgeler I_journalentryitem dan gelmiyordu o yüzden onlar okunuyor.
+        SELECT opitem~companycode,
+               opitem~accountingdocument,
+               opitem~accountingdocumentitem,
+               opitem~fiscalyear,
+               opitem~supplier,
+               opitem~profitcenter,
+               opitem~amountintransactioncurrency
+          FROM @ms_request-items AS items
+          INNER JOIN i_operationalacctgdocitem AS opitem
+            ON opitem~companycode        = items~companycode
+           AND opitem~accountingdocument = items~accountingdocument
+           AND opitem~fiscalyear         = items~fiscalyear
+           AND opitem~supplier           = items~supplier
+         WHERE opitem~financialaccounttype = 'K'
+           AND NOT EXISTS (
+               SELECT *
+                 FROM i_journalentryitem AS jeitem
+                WHERE jeitem~companycode        = items~companycode
+                  AND jeitem~accountingdocument = items~accountingdocument
+                  AND jeitem~fiscalyear         = items~fiscalyear
+                  AND jeitem~supplier           = items~supplier
+                  AND jeitem~sourceledger       = '0L'
+                  AND jeitem~ledger             = '0L'
+                  AND jeitem~financialaccounttype = 'K'
+           )
+         APPENDING CORRESPONDING FIELDS OF TABLE @mt_profitcenter.
       ENDIF.
       LOOP AT ms_request-items ASSIGNING FIELD-SYMBOL(<ls_item>).
         IF <ls_item>-paymentdocument IS INITIAL.
@@ -133,7 +159,7 @@
                                         documentreferenceid          = <ls_item>-documentreferenceid
                                         createdbyuser                = sy-uname
                                         businesstransactiontype      = 'RFBU'
-                                        accountingdocumenttype       = cond #( when mv_paymentdocumenttype is initial then 'KZ' else mv_paymentdocumenttype )
+                                        accountingdocumenttype       = COND #( WHEN mv_paymentdocumenttype IS INITIAL THEN 'KZ' ELSE mv_paymentdocumenttype )
                                         documentdate                 = cl_abap_context_info=>get_system_date( )
                                         postingdate                  = cl_abap_context_info=>get_system_date( )
                                         accountingdocumentheadertext = |{ <ls_item>-paymentnumber ALPHA = OUT } satıcı ödeme kaydı|
